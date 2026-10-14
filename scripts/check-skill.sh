@@ -121,7 +121,7 @@ fi
 PREFIXOS=""
 if [ -d "$DIR/assets/commands" ]; then
   # Prefixo declarado = o do único `<prefixo>-help.md` (aceita hífen: `overdev-context-help` -> `overdev-context`).
-  # `schematize-help.md` na engineering é o help do catálogo inteiro, não entra na conta.
+  # O help do catálogo (schematize-engineering → assets/commands/schematize-help.md) é o help do catálogo inteiro, não entra na conta.
   HELPS=""
   for f in "$DIR"/assets/commands/*-help.md; do
     [ -e "$f" ] || continue

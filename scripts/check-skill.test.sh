@@ -100,8 +100,8 @@ skill_boa comando-prefixo-com-hifen
   rm "$D"/assets/commands/dm-*.md
   for c in help load claude handoff cc a b c; do printf -- '---\ndescription: x\n---\ncorpo\n' >"$D/assets/commands/dm-ctx-$c.md"; done; esperar 0 "check-skill: ok"
 skill_boa comando-hifen-sem-help;           rm "$D"/assets/commands/dm-help.md; cp "$D/assets/commands/dm-a.md" "$D/assets/commands/dm-ctx-a.md"; esperar 1 "comando-"
-skill_boa schematize-help-na-engineering;   mv "$D" "$TMP/$NOME/skill-engineering"; D="$TMP/$NOME/skill-engineering"; sed -i '/herdado:/d' "$D/SKILL.md" "$D/assets/CLAUDE.md"; sed -i 's/schematize-docs/schematize-engineering/' "$D/SKILL.md"; printf -- '---\ndescription: x\n---\nc\n' >"$D/assets/commands/schematize-help.md"; esperar 0 "check-skill: ok"
-skill_boa schematize-help-fora-da-engineering; printf -- '---\ndescription: x\n---\nc\n' >"$D/assets/commands/schematize-help.md"; esperar 1 "comando-prefixo"
+skill_boa help-catalogo-na-engineering;     mv "$D" "$TMP/$NOME/skill-engineering"; D="$TMP/$NOME/skill-engineering"; sed -i '/herdado:/d' "$D/SKILL.md" "$D/assets/CLAUDE.md"; sed -i 's/schematize-docs/schematize-engineering/' "$D/SKILL.md"; printf -- '---\ndescription: x\n---\nc\n' >"$D/assets/commands/schematize-help.md"; esperar 0 "check-skill: ok"
+skill_boa help-catalogo-fora-da-engineering; printf -- '---\ndescription: x\n---\nc\n' >"$D/assets/commands/schematize-help.md"; esperar 1 "comando-prefixo"
 skill_boa comando-dois-prefixos;            cp "$D/assets/commands/dm-a.md" "$D/assets/commands/xx-a.md"; esperar 1 "comando-prefixo"
 skill_boa comando-sem-description;          printf 'corpo sem frontmatter\n' >"$D/assets/commands/dm-a.md"; esperar 1 "comando-frontmatter"
 skill_boa comando-colide-com-irma;          cp "$D/assets/commands/dm-a.md" "$TMP/$NOME/skill-irma/assets/commands/dm-a.md"; esperar 1 "comando-colisao"
