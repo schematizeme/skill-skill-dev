@@ -48,7 +48,8 @@ que não existe. Cite sempre `schematize-<slug> -> arquivo`, ou declare no topo 
 `readme-contagem` · `caminho-privado`. Saída `arquivo:linha: [ERRO|AVISO regra] mensagem`; exit
 0 passa, 1 reprova, 2 nada para verificar. Waiver: `.skill-ok` (`<regra> <motivo>`).
 
-Dispensa de teste para biblioteca sourceada: `# teste-ok: <motivo>` nas 30 primeiras linhas do script.
+Dispensa de teste para biblioteca sourceada: `lib.sh` e `*.lib.sh` são isentos; outro nome precisa de `# teste-ok: <motivo>` nas 30 primeiras linhas.
+Prefixo de comando = o do `<prefixo>-help.md` e pode ter hífen (`overdev-context-*`); menos de 3 comandos de trabalho é AVISO (help/load/claude/handoff/cc faltando continua erro). Na engineering, `schematize-help.md` (help do catálogo inteiro) é aceito.
 
 ## 4. Teste com vermelho plantado
 

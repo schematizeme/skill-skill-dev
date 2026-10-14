@@ -3,6 +3,15 @@
 Todas as mudanças relevantes deste pacote, no formato [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 com versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.2.0] — 2026-10-14
+### Alterado
+- `check-skill.sh` recalibrado após rodar nas 45 skills: `lib.sh`/`*.lib.sh` isentos de `script-sem-teste`;
+  menos de 3 comandos de trabalho vira AVISO (o mínimo segue erro só para help/load/claude/handoff/cc);
+  prefixo de comando vem do `<prefixo>-help.md` (aceita hífen, ex.: `overdev-context-*`); `schematize-help.md`
+  aceito na engineering. Casos novos (vermelho e verde) em `check-skill.test.sh`.
+- `references/release.md` aponta `schematize-git` para o fluxo git geral; description reduzida a ≤190.
+- Porquê: o gate gerava falso positivo em skills legítimas e o orçamento de descriptions do catálogo estourou.
+
 ## [0.1.0] — 2026-10-14
 Primeira versão. O catálogo cresceu para dezenas de skills e o conhecimento de como fazer uma estava
 espalhado em `tools/` (lint, release, sync de herdados, grafo) e na cabeça de quem já publicou. Cada

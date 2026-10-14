@@ -37,6 +37,7 @@ Ordem interna (para no primeiro erro):
 5. **Zip** `skill-<slug>.zip`, top-level `schematize-<slug>/` (acrescenta `CHANGELOG.md` e `LICENSE`).
 6. **Git:** `git add` de **lista explícita** (`VERSION`, `skill.toml`, `SKILL.md`, `versions/v<ver>`,
    `CHANGELOG.md`; nunca `-A`), commit `release: v<ver>`, tag anotada `v<ver>`, `push --follow-tags`.
+   Fluxo git geral (commit, PR, tag fora de release de skill): `schematize-git`.
    Variável `RELEASE_COAUTHOR` (opcional) acrescenta o trailer `Co-Authored-By`.
 7. **GitHub Release** com o zip; se a release já existe, só regrava o asset (`--clobber`). O zip é
    apagado num `finally`.

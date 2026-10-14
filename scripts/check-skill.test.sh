@@ -95,15 +95,22 @@ skill_boa snapshot-ausente;                 rmdir "$D/versions/v0.1.0";         
 
 echo "== vermelho: comandos"
 skill_boa comando-help-ausente;             rm "$D/assets/commands/dm-help.md";     esperar 1 "comando-obrigatorio"
-skill_boa comando-poucos-de-trabalho;       rm "$D/assets/commands/dm-b.md" "$D/assets/commands/dm-c.md"; esperar 1 "comando-obrigatorio"
+skill_boa comando-poucos-de-trabalho;       rm "$D/assets/commands/dm-b.md" "$D/assets/commands/dm-c.md"; esperar 0 "AVISO comando-obrigatorio"
+skill_boa comando-prefixo-com-hifen
+  rm "$D"/assets/commands/dm-*.md
+  for c in help load claude handoff cc a b c; do printf -- '---\ndescription: x\n---\ncorpo\n' >"$D/assets/commands/dm-ctx-$c.md"; done; esperar 0 "check-skill: ok"
+skill_boa comando-hifen-sem-help;           rm "$D"/assets/commands/dm-help.md; cp "$D/assets/commands/dm-a.md" "$D/assets/commands/dm-ctx-a.md"; esperar 1 "comando-"
+skill_boa schematize-help-na-engineering;   mv "$D" "$TMP/$NOME/skill-engineering"; D="$TMP/$NOME/skill-engineering"; sed -i '/herdado:/d' "$D/SKILL.md" "$D/assets/CLAUDE.md"; sed -i 's/schematize-docs/schematize-engineering/' "$D/SKILL.md"; printf -- '---\ndescription: x\n---\nc\n' >"$D/assets/commands/schematize-help.md"; esperar 0 "check-skill: ok"
+skill_boa schematize-help-fora-da-engineering; printf -- '---\ndescription: x\n---\nc\n' >"$D/assets/commands/schematize-help.md"; esperar 1 "comando-prefixo"
 skill_boa comando-dois-prefixos;            cp "$D/assets/commands/dm-a.md" "$D/assets/commands/xx-a.md"; esperar 1 "comando-prefixo"
 skill_boa comando-sem-description;          printf 'corpo sem frontmatter\n' >"$D/assets/commands/dm-a.md"; esperar 1 "comando-frontmatter"
 skill_boa comando-colide-com-irma;          cp "$D/assets/commands/dm-a.md" "$TMP/$NOME/skill-irma/assets/commands/dm-a.md"; esperar 1 "comando-colisao"
 
 echo "== vermelho: scripts e testes"
 skill_boa script-sem-teste;                 rm "$D/scripts/check-x.test.sh";        esperar 1 "script-sem-teste"
-skill_boa lib-com-teste-ok;                 printf '#!/usr/bin/env bash\n# teste-ok: coberta pelos testes de check-x.sh\n' >"$D/scripts/lib.sh"; esperar 0 "check-skill: ok"
-skill_boa lib-com-teste-ok-sem-motivo;      printf '#!/usr/bin/env bash\n# teste-ok:\n' >"$D/scripts/lib.sh"; esperar 1 "script-sem-teste"
+skill_boa lib-com-teste-ok;                 printf '#!/usr/bin/env bash\n# teste-ok: coberta pelos testes de check-x.sh\n' >"$D/scripts/helper.sh"; esperar 0 "check-skill: ok"
+skill_boa lib-sh-isenta;                    printf '#!/usr/bin/env bash\n' >"$D/scripts/lib.sh"; printf '#!/usr/bin/env bash\n' >"$D/scripts/util.lib.sh"; esperar 0 "check-skill: ok"
+skill_boa lib-com-teste-ok-sem-motivo;      printf '#!/usr/bin/env bash\n# teste-ok:\n' >"$D/scripts/helper.sh"; esperar 1 "script-sem-teste"
 skill_boa teste-nao-referencia-script;      printf 'esperar 1 a\nesperar 0 b\n' >"$D/scripts/check-x.test.sh"; esperar 1 "não referencia"
 skill_boa teste-sem-vermelho;               printf '# check-x.sh\nesperar 0 verde\n' >"$D/scripts/check-x.test.sh"; esperar 1 "teste-sem-vermelho"
 skill_boa teste-sem-verde;                  printf '# check-x.sh\nesperar 1 vermelho\n' >"$D/scripts/check-x.test.sh"; esperar 1 "teste-sem-verde"

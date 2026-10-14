@@ -7,7 +7,8 @@
 # Como funciona: lê o diretório da skill (`skill-<slug>/`), aplica as regras abaixo e imprime
 # achados `arquivo:linha: [ERRO|AVISO regra] mensagem`. Waiver rastreável: arquivo `.skill-ok` na
 # raiz da skill, uma linha por dispensa: `<regra> <motivo>` (sem motivo não vale).
-# Dispensa de teste por script: `# teste-ok: <motivo>` nas 30 primeiras linhas (biblioteca sourceada).
+# Dispensa de teste por script: `lib.sh`/`*.lib.sh` (biblioteca sourceada) ou `# teste-ok: <motivo>` nas 30 primeiras linhas.
+# Prefixo de comando = o do `<prefixo>-help.md` (pode ter hífen); <3 comandos de trabalho é AVISO.
 # Entrada: $1 = diretório da skill (obrigatório). Env SKILL_DESC_MAX (default 350, teto do lint),
 #   SKILL_DESC_ALVO (default 235, alvo para skill nova), SKILL_CATALOGO (raiz com os skill-*/
 #   irmãos, para checar colisão de prefixo; default: o pai do diretório).
@@ -119,11 +120,26 @@ fi
 # ---------------------------------------------------------------- comandos
 PREFIXOS=""
 if [ -d "$DIR/assets/commands" ]; then
+  # Prefixo declarado = o do único `<prefixo>-help.md` (aceita hífen: `overdev-context-help` -> `overdev-context`).
+  # `schematize-help.md` na engineering é o help do catálogo inteiro, não entra na conta.
+  HELPS=""
+  for f in "$DIR"/assets/commands/*-help.md; do
+    [ -e "$f" ] || continue
+    b="$(basename "$f" .md)"
+    [ "$SLUG" = engineering ] && [ "$b" = schematize-help ] && continue
+    HELPS="$HELPS ${b%-help}"
+  done
+  PDECL=""
+  [ "$(wc -w <<<"$HELPS")" -eq 1 ] && PDECL="${HELPS# }"
   for f in "$DIR"/assets/commands/*.md; do
     [ -e "$f" ] || continue
     b="$(basename "$f" .md)"
-    p="${b%%-*}"
-    case " $PREFIXOS " in *" $p "*) ;; *) PREFIXOS="$PREFIXOS $p" ;; esac
+    [ "$SLUG" = engineering ] && [ "$b" = schematize-help ] && { :; } || {
+      if [ -n "$PDECL" ]; then
+        case "$b" in "$PDECL"-*) p="$PDECL" ;; *) p="${b%%-*}" ;; esac
+      else p="${b%%-*}"; fi
+      case " $PREFIXOS " in *" $p "*) ;; *) PREFIXOS="$PREFIXOS $p" ;; esac
+    }
     if [ "$(sed -n 1p "$f")" != "---" ] || ! sed -n '2,6p' "$f" | grep -qE '^description:[[:space:]]*[^[:space:]]'; then
       emit ERRO comando-frontmatter "assets/commands/$b.md" 1 "comando sem frontmatter com 'description:'"
     fi
@@ -137,7 +153,7 @@ if [ -d "$DIR/assets/commands" ]; then
       [ -f "$DIR/assets/commands/$P-$o.md" ] || emit ERRO comando-obrigatorio "assets/commands/$P-$o.md" 1 "comando obrigatório ausente"
     done
     ntrab="$(find "$DIR/assets/commands" -name "$P-*.md" | grep -cvE "/$P-(help|load|claude|handoff|cc)\.md$")"
-    [ "$ntrab" -ge 3 ] || emit ERRO comando-obrigatorio assets/commands 1 "$ntrab comando(s) de trabalho (mínimo 3, o ideal é 3 a 5)"
+    [ "$ntrab" -ge 3 ] || emit AVISO comando-obrigatorio assets/commands 1 "$ntrab comando(s) de trabalho (o ideal é 3 a 5; aviso, não erro)"
     for irma in "$CATALOGO"/skill-*; do
       [ -d "$irma/assets/commands" ] && [ "$(cd "$irma" && pwd)" != "$DIR" ] || continue
       for c in "$irma"/assets/commands/*.md; do
@@ -157,6 +173,8 @@ if [ -d "$DIR/scripts" ]; then
     b="$(basename "$s")"
     case "$b" in *.test.sh) continue ;; esac
     t="$DIR/scripts/${b%.sh}.test.sh"
+    # biblioteca sourceada (`lib.sh`, `*.lib.sh`) é isenta; outras, só com `# teste-ok:` no cabeçalho
+    case "$b" in lib.sh|*.lib.sh) continue ;; esac
     # biblioteca sourceada, coberta pelos testes dos scripts que a usam: `# teste-ok: <motivo>` no cabeçalho
     head -n 30 "$s" | grep -qE '#[[:space:]]*teste-ok:[[:space:]]*[^[:space:]]+' && continue
     if [ ! -f "$t" ]; then
