@@ -3,7 +3,7 @@ name: schematize-skill-dev
 metadata:
   version: 0.1.0
 description: >-
-  Cria e mantém skills do catálogo schematize: anatomia, description com gatilho, herdados, lint, teste com vermelho, release e grafo. Use ao tocar skill-*/, SKILL.md ou skill.toml. Docs: schematize-docs.
+  Cria e mantém skills do catálogo: anatomia, description, herdados, lint, teste com vermelho, release e grafo. Use ao tocar skill-*/, SKILL.md ou skill.toml. Docs: schematize-docs.
 ---
 <!-- cross-skill: precedencia.md, orquestracao.md -> schematize-engineering -->
 
