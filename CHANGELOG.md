@@ -3,6 +3,14 @@
 Todas as mudanças relevantes deste pacote, no formato [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 com versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.3.0] — 2026-10-15
+### Alterado
+- `/skill-release` e `references/release.md`: dentro do catálogo, `node tools/release.mjs <slug> <ver>`
+  (ou `--batch`) é o ÚNICO caminho; o rito manual vira fallback só fora do catálogo.
+- Documenta os passos novos da ferramenta: commit+push automático dos derivados (`skills.json` no front,
+  `.schematize/grafos/` no catálogo), `--no-push-derived` e o `ci.sh` final.
+- Porquê: agentes seguiam o rito manual e esqueciam os derivados, deixando o GitHub atrás do local.
+
 ## [0.2.0] — 2026-10-14
 ### Alterado
 - `check-skill.sh` recalibrado após rodar nas 45 skills: `lib.sh`/`*.lib.sh` isentos de `script-sem-teste`;

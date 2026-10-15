@@ -16,12 +16,16 @@
 Mais: `versions/v<ver>/` (snapshot) e a primeira entrada do `CHANGELOG.md` (escrita por gente, com o
 porquê, ANTES do release: o release recusa sem ela e não inventa texto).
 
-## 2. Com o catálogo ao lado: `tools/release.mjs`
+## 2. No catálogo: `tools/release.mjs` é o ÚNICO caminho
+
+Dentro do catálogo, **não faça nenhum passo à mão** (nem "só o zip", nem "só a tag"): a ferramenta
+valida, é idempotente e publica os derivados. O rito manual da seção 3 é fallback para fora dele.
 
 ```bash
 node tools/release.mjs <slug> <versão> --dry-run        # ensaio: pré-valida, não grava
 node tools/release.mjs <slug> <versão> [--notes "..."]
 node tools/release.mjs --batch <slug>@<ver> <slug>@<ver> ...   # gate uma vez, publica em série
+# --no-push-derived: pula o commit/push de skills.json e grafos (só se pedirem)
 ```
 
 Ordem interna (para no primeiro erro):
@@ -43,11 +47,15 @@ Ordem interna (para no primeiro erro):
    apagado num `finally`.
 8. **Derivados:** `sync-skills-json` e `build-graph` (o grafo carrega a versão de cada skill; sem
    regerar, o release SEGUINTE falha no gate por causa deste).
+9. **Publica os derivados:** commit só de `content/skills.json` no front
+   (`chore(skills): versões do lote ...`) e de `.schematize/grafos/` no catálogo
+   (`chore(grafos): versões do lote ...`), com push e `pull --rebase` se recusado; idempotente.
+10. **Gate final:** `tools/ci.sh` de novo; o rc é reportado (rc != 0 -> exit 1).
 
 Retomada: tag já no remoto não é recriada; "nada novo a commitar" segue adiante. Lote interrompido
 reporta publicadas e faltantes, sem desfazer.
 
-## 3. Sem o catálogo: primeira versão ou repo isolado
+## 3. Fallback, só FORA do catálogo: primeira versão ou repo isolado
 
 Reproduz os passos 3 a 7 à mão, com os scripts desta skill:
 
@@ -71,9 +79,9 @@ copiado à mão com os mesmos itens). Instale e prove: `bash skill-<slug>/instal
 
 ## 4. Depois do release
 
-- `skills.json` do front e `tools/graph-meta.json` (entrada nova de skill nova) são do dono do
-  catálogo (`references/integracao-catalogo.md`). Quem publica diz o que falta; não edita fora do
-  escopo.
+- No catálogo, `skills.json` e grafos já saem commitados e publicados pela ferramenta. Resta
+  `tools/graph-meta.json` (entrada nova de skill nova), do dono do catálogo
+  (`references/integracao-catalogo.md`): quem publica diz o que falta; não edita fora do escopo.
 - Skills dependentes: mudou um piso na base? Os blocos herdados das outras skills mudam por sync, e
   cada uma precisa do seu release (minor) para o texto novo chegar a quem instalou.
 
