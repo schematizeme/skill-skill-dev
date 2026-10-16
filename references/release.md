@@ -42,7 +42,10 @@ Ordem interna (para no primeiro erro):
 6. **Git:** `git add` de **lista explícita** (`VERSION`, `skill.toml`, `SKILL.md`, `versions/v<ver>`,
    `CHANGELOG.md`; nunca `-A`), commit `release: v<ver>`, tag anotada `v<ver>`, `push --follow-tags`.
    Fluxo git geral (commit, PR, tag fora de release de skill): `schematize-git`.
-   Variável `RELEASE_COAUTHOR` (opcional) acrescenta o trailer `Co-Authored-By`.
+   Trailer `Co-Authored-By` em TODO commit da ferramenta (release, derivados, pré-gate): default em
+   `tools/release.config.json` (`coauthor`), `RELEASE_COAUTHOR` sobrepõe, vazia ou `--no-coauthor` desliga.
+   Antes do gate, o release regenera os grafos e commita só eles (`chore(grafos): regenera antes do
+   release <lote>`; `--dry-run` apenas avisa) — não é mais preciso regenerar à mão.
 7. **GitHub Release** com o zip; se a release já existe, só regrava o asset (`--clobber`). O zip é
    apagado num `finally`.
 8. **Derivados:** `sync-skills-json` e `build-graph` (o grafo carrega a versão de cada skill; sem

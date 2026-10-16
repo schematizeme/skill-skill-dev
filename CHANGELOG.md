@@ -3,6 +3,13 @@
 Todas as mudanças relevantes deste pacote, no formato [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 com versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.3.2] — 2026-10-16
+### Alterado
+- `references/release.md`: o release regenera e commita os grafos ANTES do gate (`--dry-run` só avisa)
+  e o trailer `Co-Authored-By` vale para todos os commits da ferramenta, com default em
+  `tools/release.config.json` (`RELEASE_COAUTHOR` sobrepõe; vazia ou `--no-coauthor` desliga).
+- Porquê: grafo defasado reprovava o gate (3 vezes num dia) e só o commit `release:` levava coautoria.
+
 ## [0.3.1] — 2026-10-15
 ### Alterado
 - `references/release.md` e `/skill-new`: documentam a 1ª versão nativa do `tools/release.mjs`
