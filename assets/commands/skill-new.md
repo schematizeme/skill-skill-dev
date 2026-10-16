@@ -25,6 +25,6 @@ do catálogo como molde (a mais recente de disciplina).
    falhar antes de ver o verde passar.
 6. **Prove:** `bash .claude/skills/schematize-skill-dev/scripts/check-skill.sh skill-<slug>`,
    `node tools/lint.mjs` (zero achados NA skill) e os `*.test.sh`. Diga o que não rodou.
-7. **Snapshot da 1ª versão:** `versions/v0.1.0/` (use `scripts/bump-skill.sh` ou o release).
+7. **Snapshot da 1ª versão:** `versions/v0.1.0/` (use `scripts/bump-skill.sh` ou o release). A 1ª publicação é nativa: `node tools/release.mjs <slug> 0.1.0 --first` aceita `VERSION` == versão pedida e cria o repo remoto; nunca use `VERSION` 0.0.0 + `.gitkeep` como atalho.
 8. Publicação é `/skill-release`; integração no catálogo (`graph-meta.json`, `skills.json`) está em
    `references/integracao-catalogo.md`.

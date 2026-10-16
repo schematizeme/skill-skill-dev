@@ -3,6 +3,13 @@
 Todas as mudanças relevantes deste pacote, no formato [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 com versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.3.1] — 2026-10-15
+### Alterado
+- `references/release.md` e `/skill-new`: documentam a 1ª versão nativa do `tools/release.mjs`
+  (`--first`; aceita versão == `VERSION`, cria o repo remoto público) e vetam o hack
+  `VERSION` 0.0.0 + `versions/v0.0.0/.gitkeep`.
+- Porquê: skill nova (`regression`) precisou do hack porque o release exigia versão > atual.
+
 ## [0.3.0] — 2026-10-15
 ### Alterado
 - `/skill-release` e `references/release.md`: dentro do catálogo, `node tools/release.mjs <slug> <ver>`

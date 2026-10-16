@@ -55,6 +55,20 @@ Ordem interna (para no primeiro erro):
 Retomada: tag já no remoto não é recriada; "nada novo a commitar" segue adiante. Lote interrompido
 reporta publicadas e faltantes, sem desfazer.
 
+### Primeira versão dentro do catálogo (nativo, sem hack)
+
+Skill sem nenhuma tag `v*` (local ou no origin) é detectada como 1ª versão: o release aceita a
+versão **igual** à `VERSION` atual (ex.: `0.1.0`), cria `schematizeme/skill-<slug>` público se
+`gh repo view` falhar e empurra com `-u origin main --follow-tags`. Basta o repo git próprio com
+commit inicial, árvore limpa e a entrada do CHANGELOG no topo:
+
+```bash
+node tools/release.mjs <slug> 0.1.0 --first --notes "..."   # --first: reprova se já houver release
+```
+
+Não crie `VERSION` 0.0.0 nem `versions/v0.0.0/.gitkeep` para contornar: era o hack antigo.
+Critério e teste: seção "Primeira versão" do RELEASE.md do catálogo.
+
 ## 3. Fallback, só FORA do catálogo: primeira versão ou repo isolado
 
 Reproduz os passos 3 a 7 à mão, com os scripts desta skill:
